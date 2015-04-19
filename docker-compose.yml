@@ -9,9 +9,13 @@
 # It runs several Docker containers at the same time
 # as described here.
 #
-couchbase:    
-    image: ncolomer/couchbase
+couchbase:   
+    environment:
+        - CB_REST_USER=user
+        - CB_REST_PASSWORD=password  
+    image: dockerimages/couchbase:3.0
     ports: 
+        - "8092:8092"
         - "8091:8091"
         - "11210:11210"
 server:
