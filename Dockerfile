@@ -5,7 +5,7 @@
 # If "permission denied" on activator, run:
 # su -c "chcon -Rt svirt_sandbox_file_t <local path to data in the host>"
 #
-FROM debian:stable 
+FROM ubuntu:14.10
 
 MAINTAINER Dani Perez
 
