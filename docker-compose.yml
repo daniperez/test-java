@@ -1,0 +1,35 @@
+# This is to be executed by docker-compose [1] tool from 
+# the root folder of test-java:
+#
+#  > cd test-java 
+#  # Only once (or if you change the Dockerfiles)
+#  > docker-compose build
+#  > docker-compose up 
+#
+# It runs several Docker containers at the same time
+# as described here.
+#
+couchbase:    
+    build: ncolomer/couchbase
+    ports: 
+        - "8091:8091"
+        - "11210:11210"
+server:
+    # We need daniperez/test-java (Docker Hub), not current's folder Dockerfile,
+    # if we want this to work in AWS ECS.
+    build: daniperez/test-java 
+    volumes:
+        # Re-uses your local Ivy cache. In Fedora run chcon first.
+        # If we don't share the cache, it's too slow.
+        - ~/.ivy2:/root/.ivy2
+    environment:
+        - COUCHBASE_HOSTS=db
+    ports:
+        - "9000:9000"
+    links:
+        # Container "couchbase" can be found under DNS name "db"
+        - couchbase:db
+    stdin_open: true
+    #tty: true
+    
+# [1] https://docs.docker.com/compose/

@@ -1,0 +1,33 @@
+description = "Java Test"
+ 
+apply plugin: 'java'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+  compile([
+    'org.slf4j:slf4j-api:1.7.10',
+    'com.google.guava:guava:18.0',
+    'joda-time:joda-time:2.6',
+  ])
+  
+  runtime([
+    'ch.qos.logback:logback-classic:1.1.2'
+  ])
+  
+  testCompile([
+    'org.mockito:mockito-core:1.+',
+    'junit:junit:4.11',
+  ])
+   
+  testRuntime([
+    'ch.qos.logback:logback-classic:1.1.2'
+  ])
+}
+
+
+mainClassName = "daniperez.Main"

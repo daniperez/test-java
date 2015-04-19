@@ -1,0 +1,47 @@
+machine:
+  services:
+    - docker
+  java:
+    version: oraclejdk7
+  environment:
+    CI_FOLDER: "/ci"
+
+general:
+  artifacts:
+    - "build/reports"
+
+dependencies:
+  override:
+    - ./gradlew compileTestJava
+  cache_directories:
+    - "~/.gradle" 
+    - "build"
+    - "~/docker"    
+
+checkout:
+  post:
+    - git submodule sync
+    - git submodule update --init
+
+dependencies:
+  override:
+    - pip install docker-compose
+    - if [[ -e ~/docker/cb-image.tar ]]; then docker load -i ~/docker/cb-image.tar; fi
+    - docker-compose up -p test -d --no-recreate couchbase
+    - mkdir -p ~/docker; docker save test_couchbase > ~/docker/cb-image.tar
+    - if [[ -e ~/docker/test-image.tar ]]; then docker load -i ~/docker/test-image.tar; fi
+    - docker build -t daniperez/test-java:0.1.0 .
+    - mkdir -p ~/docker; docker save daniperez/test-java:0.1.0 > ~/docker/test-image.tar
+
+test:
+  override:     
+    # TODO: Do this inside Docker
+    - ./gradlew check
+     
+deployment:
+  ecs:
+    branch: [master, staging]
+    commands:
+        - docker login -p $DOCKER_HUB_PASSWORD -u $DOCKER_HUB_USER
+        - docker push daniperez/test-java:0.1.0
+        #- docker daniperez/test-java:0.1.0 ./run aws-ecs-deploy
