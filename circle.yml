@@ -52,7 +52,7 @@ deployment:
   ecs:
     branch: [master, staging]
     commands:
-        - docker login -p $DOCKER_HUB_PASSWORD -u $DOCKER_HUB_USER
+        - docker login -p $DOCKER_HUB_PASSWORD -u $DOCKER_HUB_USER -e $DOCKER_HUB_EMAIL
         # (I had to create daniperez/test-java manually)
         - docker push daniperez/test-java:0.1.0
         #- docker daniperez/test-java:0.1.0 ./run aws-ecs-deploy
