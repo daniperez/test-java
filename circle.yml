@@ -25,12 +25,10 @@ checkout:
 
 dependencies:
   override:
-    # Required by docker-compose
-    - sudo pip install --upgrade requests==2.5.2
-    - sudo pip install --upgrade docker-compose
+    - sudo pip install --upgrade requests==2.5.2 docker-compose
     - if [[ -e ~/docker/cb-image.tar ]]; then docker load -i ~/docker/cb-image.tar; fi
     - docker-compose -p test up -d --no-recreate couchbase
-    - mkdir -p ~/docker; docker save test_couchbase > ~/docker/cb-image.tar
+    - mkdir -p ~/docker; docker save test_couchbase_1 > ~/docker/cb-image.tar
     - if [[ -e ~/docker/test-image.tar ]]; then docker load -i ~/docker/test-image.tar; fi
     - docker build -t daniperez/test-java:0.1.0 .
     - mkdir -p ~/docker; docker save daniperez/test-java:0.1.0 > ~/docker/test-image.tar
