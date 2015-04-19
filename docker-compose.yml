@@ -10,14 +10,14 @@
 # as described here.
 #
 couchbase:    
-    build: ncolomer/couchbase
+    image: ncolomer/couchbase
     ports: 
         - "8091:8091"
         - "11210:11210"
 server:
     # We need daniperez/test-java (Docker Hub), not current's folder Dockerfile,
     # if we want this to work in AWS ECS.
-    build: daniperez/test-java 
+    image: daniperez/test-java 
     volumes:
         # Re-uses your local Ivy cache. In Fedora run chcon first.
         # If we don't share the cache, it's too slow.
