@@ -36,8 +36,6 @@ ADD requirements.txt /requirements.txt
 
 RUN pip install -r /requirements.txt
 
-RUN ./activator update compile
-
 RUN container-transform docker-compose.yml > /aws-ecs.json
 
 CMD ./gradlew run

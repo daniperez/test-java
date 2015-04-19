@@ -26,11 +26,18 @@ checkout:
 dependencies:
   override:
     - sudo pip install --upgrade requests==2.5.2 docker-compose
+    # Ubuntu
+    - if [[ -e ~/docker/ubuntu-image.tar ]]; then docker load -i ~/docker/ubuntu-image.tar; fi
+    - docker images
+    - docker pull ubuntu:14.10
+    - mkdir -p ~/docker; docker save ubuntu:14.10 > ~/docker/ubuntu-image.tar
+    # Coachbase
     - if [[ -e ~/docker/cb-image.tar ]]; then docker load -i ~/docker/cb-image.tar; fi
     - docker images
     - docker-compose -p test up -d couchbase
     - docker-compose ps ; docker ps
     - mkdir -p ~/docker; docker save $(docker inspect test_couchbase_1 | grep image | cut -d ":" -f 2- | sed -e 's/\"//g' | sed -e 's/,//g' | sed -e 's/ //g') > ~/docker/cb-image.tar
+    # test-java module
     - if [[ -e ~/docker/test-image.tar ]]; then docker load -i ~/docker/test-image.tar; fi
     - docker images
     - docker build -t daniperez/test-java:0.1.0 .
