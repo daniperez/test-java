@@ -29,7 +29,7 @@ dependencies:
     - if [[ -e ~/docker/cb-image.tar ]]; then docker load -i ~/docker/cb-image.tar; fi
     - docker-compose -p test up -d couchbase
     - docker-compose ps ; docker ps
-    - mkdir -p ~/docker; docker save test_couchbase_1 > ~/docker/cb-image.tar
+    - mkdir -p ~/docker; docker save $(docker inspect test_couchbase_1 | grep image | cut -d ":" -f 2- | sed -e 's/\"//g' | sed -e 's/,//g' | sed -e 's/ //g') > ~/docker/cb-image.tar
     - if [[ -e ~/docker/test-image.tar ]]; then docker load -i ~/docker/test-image.tar; fi
     - docker build -t daniperez/test-java:0.1.0 .
     - mkdir -p ~/docker; docker save daniperez/test-java:0.1.0 > ~/docker/test-image.tar
